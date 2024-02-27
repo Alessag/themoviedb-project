@@ -1,6 +1,11 @@
 module.exports = {
   root: true,
   env: { browser: true, es2020: true },
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
@@ -71,6 +76,9 @@ module.exports = {
   overrides: [
     {
       files: ['*.js'],
+      rules: {
+        '@typescript-eslint/no-var-requires': 'off',
+      },
     },
     {
       // override "simple-import-sort" config
