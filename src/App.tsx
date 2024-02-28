@@ -10,7 +10,7 @@ const App = () => {
 
   const query = useQuery({
     queryKey: ['movies'],
-    queryFn: movieService.getPopularMovies,
+    queryFn: () => movieService.getPopularMovies(),
   });
 
   return (

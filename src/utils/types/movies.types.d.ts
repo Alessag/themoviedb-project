@@ -21,3 +21,16 @@ export interface Movie {
   vote_average: number;
   vote_count: number;
 }
+
+export interface GetPopularMovieParams {
+  language?: string;
+  region?: string;
+  page?: number;
+}
+
+export interface SearchMovieParams extends GetPopularMovieParams {
+  query: string;
+  include_adult?: boolean;
+  primary_release_year?: string;
+  year?: string;
+}

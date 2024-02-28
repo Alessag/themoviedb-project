@@ -1,10 +1,14 @@
-import type { MovieResponse } from '../types/movies.types.d';
+import type {
+  GetPopularMovieParams,
+  MovieResponse,
+  SearchMovieParams,
+} from '../types/movies.types.d';
 
 export class MovieService {
-  private async makeRequest<T>(
+  private async makeRequest<T, Params>(
     url: string,
     method: string,
-    queryParams: Record<string, string>,
+    queryParams: Params,
   ): Promise<T> {
     const BASE_URL = 'https://api.themoviedb.org/3';
 
@@ -38,28 +42,22 @@ export class MovieService {
     }
   }
 
-  getPopularMovies = async (): Promise<MovieResponse> => {
-    const response = await this.makeRequest<MovieResponse>(
-      'movie/popular',
-      'GET',
-      {
-        page: '1',
-        language: 'en-US',
-      },
-    );
+  getPopularMovies = async (
+    input: GetPopularMovieParams = {},
+  ): Promise<MovieResponse> => {
+    const response = await this.makeRequest<
+      MovieResponse,
+      GetPopularMovieParams
+    >('movie/popular', 'GET', input);
 
     return response;
   };
 
-  searchMovies = async (): Promise<MovieResponse> => {
-    const response = await this.makeRequest<MovieResponse>(
+  searchMovies = async (input: SearchMovieParams): Promise<MovieResponse> => {
+    const response = await this.makeRequest<MovieResponse, SearchMovieParams>(
       'search/movie',
       'GET',
-      {
-        page: '1',
-        language: 'en-US',
-        query: 'patos',
-      },
+      input,
     );
 
     return response;
