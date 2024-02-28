@@ -1,11 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { Card, Col, Row } from 'antd';
+import { Col, Row } from 'antd';
 
+import MovieCard from './components/MovieCard';
 import { MovieService } from './utils/services/movie.service';
 
 import './App.css';
-
-const { Meta } = Card;
 
 const App = () => {
   const movieService = new MovieService();
@@ -37,22 +36,7 @@ const App = () => {
         >
           {data?.results.map((movie) => (
             <Col key={movie.id}>
-              <Card
-                style={{ width: '240px' }}
-                cover={
-                  <img
-                    className="w-[238px] h-[361px]"
-                    alt={`Poster for ${movie.title}`}
-                    src={`https://image.tmdb.org/t/p/w185/${movie.poster_path}`}
-                  />
-                }
-              >
-                <Meta
-                  title={movie.title}
-                  description={`Fecha de estreno: ${movie.release_date.toString()}`}
-                  className="block w-[190px] text-ellipsis whitespace-nowrap overflow-hidden"
-                />
-              </Card>
+              <MovieCard movie={movie} />
             </Col>
           ))}
         </Row>
