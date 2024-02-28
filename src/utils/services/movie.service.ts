@@ -1,6 +1,9 @@
 import type {
   GetPopularMovieParams,
+  GuestSessionIdResponse,
   MovieResponse,
+  RateMovieParams,
+  RateMovieResponse,
   SearchMovieParams,
 } from '../types/movies.types.d';
 
@@ -8,7 +11,8 @@ export class MovieService {
   private async makeRequest<T, Params>(
     url: string,
     method: string,
-    queryParams: Params,
+    queryParams?: Params,
+    body?: BodyInit,
   ): Promise<T> {
     const BASE_URL = 'https://api.themoviedb.org/3';
 
@@ -16,7 +20,9 @@ export class MovieService {
       method,
       headers: {
         accept: 'application/json',
+        'content-type': 'application/json',
       },
+      body: body,
     };
 
     const searchParams = new URLSearchParams({
@@ -58,6 +64,30 @@ export class MovieService {
       'search/movie',
       'GET',
       input,
+    );
+
+    return response;
+  };
+
+  guestSessionId = async (): Promise<GuestSessionIdResponse> => {
+    const response = await this.makeRequest<GuestSessionIdResponse, null>(
+      'authentication/guest_session/new',
+      'GET',
+    );
+
+    return response;
+  };
+
+  rateMovie = async (
+    input: RateMovieParams,
+    movie_id: number,
+    rate: number,
+  ): Promise<RateMovieResponse> => {
+    const response = await this.makeRequest<RateMovieResponse, RateMovieParams>(
+      `movie/${movie_id}/rating`,
+      'POST',
+      input,
+      JSON.stringify({ value: rate }),
     );
 
     return response;

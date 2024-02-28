@@ -34,3 +34,18 @@ export interface SearchMovieParams extends GetPopularMovieParams {
   primary_release_year?: string;
   year?: string;
 }
+
+export interface GuestSessionIdResponse {
+  success: boolean;
+  guest_session_id: string;
+  expires_at: string;
+}
+
+export interface RateMovieResponse {
+  status_code: number;
+  status_message: string;
+  success: boolean;
+}
+export interface RateMovieParams {
+  guest_session_id: string;
+}

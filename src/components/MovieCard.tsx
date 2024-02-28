@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { Card, Modal } from 'antd';
+import { useMutation } from '@tanstack/react-query';
+import { Button, Card, Modal, Rate } from 'antd';
 
+import { MovieService } from '../utils/services/movie.service';
 import type { Movie } from '../utils/types/movies.types';
 
 const { Meta } = Card;
@@ -10,13 +12,34 @@ interface MovieCardProps {
 }
 
 const MovieCard = ({ movie }: MovieCardProps) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const movieService = new MovieService();
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [rating, setRating] = useState<number>(0);
+
+  const mutation = useMutation({
+    mutationFn: (rating: number) =>
+      movieService.rateMovie(
+        { guest_session_id: '5a1c1e316eb6a1efecf7419b3b604ce7' },
+        movie.id,
+        rating,
+      ),
+  });
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleRateChange = (value: number) => {
+    setRating(value);
+  };
+
+  const handleRateSubmit = () => {
+    mutation.mutate(rating);
+    setRating(0);
     setIsModalOpen(false);
   };
 
@@ -64,6 +87,25 @@ const MovieCard = ({ movie }: MovieCardProps) => {
             <span className="font-bold">Original Language:</span>{' '}
             {movie.original_language}
           </p>
+          <div className="flex items-center">
+            <p className="font-bold">Rate the movie: </p>
+            <Rate
+              count={10}
+              key="rate"
+              allowHalf
+              defaultValue={0}
+              onChange={handleRateChange}
+              className="mx-2"
+            />
+            <Button
+              key="submit"
+              type="primary"
+              ghost
+              onClick={handleRateSubmit}
+            >
+              Submit
+            </Button>
+          </div>
         </div>
       </Modal>
     </div>
