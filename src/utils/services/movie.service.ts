@@ -1,5 +1,6 @@
 import type {
   GetPopularMovieParams,
+  GetRatedMovieParams,
   GuestSessionIdResponse,
   MovieResponse,
   RateMovieParams,
@@ -88,6 +89,19 @@ export class MovieService {
       'POST',
       input,
       JSON.stringify({ value: rate }),
+    );
+
+    return response;
+  };
+
+  getRatedMovies = async (
+    guest_session_id: string,
+    input: GetRatedMovieParams = {},
+  ): Promise<MovieResponse> => {
+    const response = await this.makeRequest<MovieResponse, GetRatedMovieParams>(
+      `guest_session/${guest_session_id}/rated/movies`,
+      'GET',
+      input,
     );
 
     return response;

@@ -20,6 +20,7 @@ export interface Movie {
   video: boolean;
   vote_average: number;
   vote_count: number;
+  rating?: number;
 }
 
 export interface GetPopularMovieParams {
@@ -48,4 +49,9 @@ export interface RateMovieResponse {
 }
 export interface RateMovieParams {
   guest_session_id: string;
+}
+
+export interface GetRatedMovieParams
+  extends Omit<GetPopularMovieParams, 'region'> {
+  sort_by?: string;
 }

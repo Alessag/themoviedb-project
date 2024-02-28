@@ -15,7 +15,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
   const movieService = new MovieService();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [rating, setRating] = useState<number>(0);
+  const [rating, setRating] = useState<number>(movie.rating ?? 0);
 
   const mutation = useMutation({
     mutationFn: (rating: number) =>
@@ -93,7 +93,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
               count={10}
               key="rate"
               allowHalf
-              defaultValue={0}
+              defaultValue={rating}
               onChange={handleRateChange}
               className="mx-2"
             />
