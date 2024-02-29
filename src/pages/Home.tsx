@@ -1,44 +1,51 @@
-import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { Col, Row } from 'antd';
 
-import MovieCard from '../components/MovieCard';
+import MoviesGrid from '../components/movies/MoviesGrid';
+import ErrorMessage from '../components/utils/ErrorMessage';
+import LoadingSpinner from '../components/utils/LoadingSpinner';
 import { MovieService } from '../utils/services/movie.service';
 
 const Home = () => {
   const movieService = new MovieService();
 
+  const [page, setPage] = useState<number>(1);
+
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['movies'],
-    queryFn: () => movieService.getPopularMovies(),
+    queryKey: ['movies', page],
+    queryFn: () => movieService.getPopularMovies({ page: page }),
+    placeholderData: keepPreviousData,
   });
 
   if (isLoading) {
-    return <span>Loading...</span>;
+    return <LoadingSpinner />;
   }
 
   if (isError) {
-    return <span>Error: {error.message}</span>;
+    return <ErrorMessage error={error.message} />;
   }
 
   return (
-    <div className="flex justify-center flex-col">
-      <Row>
+    <div className="container my-0 mx-auto">
+      <Row justify="center">
         <Col xs={24}>
-          <h1 className="text-3xl font-bold underline">Popular Movies</h1>
+          <h1 className="text-3xl font-bold text-center my-6">
+            Popular Movies
+          </h1>
+        </Col>
+        <Col>
+          {data && data.results.length > 0 ? (
+            <MoviesGrid
+              movies={data}
+              page={page}
+              setPage={setPage}
+            />
+          ) : (
+            <p className="text-xl">Movies not found</p>
+          )}
         </Col>
       </Row>
-      <div className="container mx-auto my-0">
-        <Row
-          justify="start"
-          gutter={[16, 16]}
-        >
-          {data?.results.map((movie) => (
-            <Col key={movie.id}>
-              <MovieCard movie={movie} />
-            </Col>
-          ))}
-        </Row>
-      </div>
     </div>
   );
 };

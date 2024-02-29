@@ -55,3 +55,9 @@ export interface GetRatedMovieParams
   extends Omit<GetPopularMovieParams, 'region'> {
   sort_by?: string;
 }
+
+export interface MovieApiErrorResponse {
+  status_code: number;
+  status_message: string;
+  success: boolean;
+}

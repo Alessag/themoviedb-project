@@ -2,6 +2,7 @@ import type {
   GetPopularMovieParams,
   GetRatedMovieParams,
   GuestSessionIdResponse,
+  MovieApiErrorResponse,
   MovieResponse,
   RateMovieParams,
   RateMovieResponse,
@@ -37,11 +38,15 @@ export class MovieService {
         options,
       );
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const body = await response.json();
+
       if (!response.ok) {
-        throw new Error(await response.text());
+        const error = body as MovieApiErrorResponse;
+        throw new Error(error.status_message);
       }
 
-      const data: T = (await response.json()) as T;
+      const data: T = body as T;
       return data;
     } catch (error) {
       console.error('Error fetching movies:', error);

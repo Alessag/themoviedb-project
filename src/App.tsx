@@ -3,6 +3,8 @@ import { useDispatch } from 'react-redux';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 
+import ErrorMessage from './components/utils/ErrorMessage';
+import LoadingSpinner from './components/utils/LoadingSpinner';
 import { setGuestSessionId } from './features/guest/guestSlice';
 import ErrorPage from './pages/ErrorPage';
 import Home from './pages/Home';
@@ -55,11 +57,11 @@ const App = () => {
   }, [guestQuery]);
 
   if (isLoading) {
-    return <span>Loading...</span>;
+    return <LoadingSpinner />;
   }
 
   if (isError) {
-    return <span>Error: {error.message}</span>;
+    return <ErrorMessage error={error.message} />;
   }
 
   return <RouterProvider router={router} />;
