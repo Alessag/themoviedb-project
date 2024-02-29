@@ -12,7 +12,7 @@ interface MovieCardProps {
 }
 
 const MoviesGrid = ({ movies, page, setPage }: MovieCardProps) => {
-  if (!movies) {
+  if (movies.results.length === 0) {
     return <div>No movies available</div>;
   }
 
@@ -31,7 +31,7 @@ const MoviesGrid = ({ movies, page, setPage }: MovieCardProps) => {
       <Row
         justify="center"
         align="middle"
-        className="bg-blue-300 h-20 my-7"
+        className="h-20 my-7"
       >
         <Col>
           <CustomPagination

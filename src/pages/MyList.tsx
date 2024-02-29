@@ -5,6 +5,8 @@ import { Col, Row } from 'antd';
 
 import type { RootState } from '../app/store';
 import MoviesGrid from '../components/movies/MoviesGrid';
+import ErrorMessage from '../components/utils/ErrorMessage';
+import LoadingSpinner from '../components/utils/LoadingSpinner';
 import { MovieService } from '../utils/services/movie.service';
 
 const MyList = () => {
@@ -29,15 +31,15 @@ const MyList = () => {
   });
 
   if (isLoading) {
-    return <span>Loading...</span>;
+    return <LoadingSpinner />;
   }
 
   if (isError) {
-    return <span>No rated movies found :(</span>;
+    return <ErrorMessage error="No rated movies found" />;
   }
 
   return (
-    <div className="border-4 border-grey-400 container my-0 mx-auto">
+    <div className="container my-0 mx-auto">
       <Row>
         <Col xs={24}>
           <h1 className="text-3xl font-bold text-center my-6">Rated Movies</h1>
