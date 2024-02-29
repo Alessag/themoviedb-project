@@ -1,15 +1,19 @@
-import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { Col, Row } from 'antd';
 
-import MovieCard from '../components/MovieCard';
+import MoviesGrid from '../components/MoviesGrid';
 import { MovieService } from '../utils/services/movie.service';
 
 const Home = () => {
   const movieService = new MovieService();
 
+  const [page, setPage] = useState<number>(1);
+
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['movies'],
-    queryFn: () => movieService.getPopularMovies(),
+    queryKey: ['movies', page],
+    queryFn: () => movieService.getPopularMovies({ page: page }),
+    placeholderData: keepPreviousData,
   });
 
   if (isLoading) {
@@ -27,18 +31,13 @@ const Home = () => {
           <h1 className="text-3xl font-bold underline">Popular Movies</h1>
         </Col>
       </Row>
-      <div className="container mx-auto my-0">
-        <Row
-          justify="start"
-          gutter={[16, 16]}
-        >
-          {data?.results.map((movie) => (
-            <Col key={movie.id}>
-              <MovieCard movie={movie} />
-            </Col>
-          ))}
-        </Row>
-      </div>
+      {data && (
+        <MoviesGrid
+          movies={data}
+          page={page}
+          setPage={setPage}
+        />
+      )}
     </div>
   );
 };

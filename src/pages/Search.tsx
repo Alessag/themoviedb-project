@@ -2,15 +2,16 @@ import { useState } from 'react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { Col, Row } from 'antd';
 
-import MovieCard from '../components/MovieCard';
+import MoviesGrid from '../components/MoviesGrid';
 import { MovieService } from '../utils/services/movie.service';
 
 const Search = () => {
-  const [search, setSearch] = useState<string>('');
-  const [page, setPage] = useState<number>(1);
   const movieService = new MovieService();
 
-  const query = useQuery({
+  const [search, setSearch] = useState<string>('');
+  const [page, setPage] = useState<number>(1);
+
+  const { data } = useQuery({
     queryKey: ['movies', page, search],
     queryFn: () => movieService.searchMovies({ query: search, page: page }),
     placeholderData: keepPreviousData,
@@ -29,42 +30,14 @@ const Search = () => {
             }}
           />
         </Col>
-        <div className="container mx-auto my-0">
-          <Row
-            justify="start"
-            gutter={[16, 16]}
-          >
-            {query.data?.results.map((movie) => (
-              <Col key={movie.id}>
-                <MovieCard movie={movie} />
-              </Col>
-            ))}
-          </Row>
-        </div>
+        {data && (
+          <MoviesGrid
+            movies={data}
+            page={page}
+            setPage={setPage}
+          />
+        )}
       </Row>
-      <span>Current Page: {page}</span>
-      <button
-        onClick={() => setPage((old) => Math.max(old - 1, 1))}
-        disabled={page === 1}
-      >
-        Previous Page
-      </button>{' '}
-      <button
-        onClick={() => {
-          if (
-            !query.isPlaceholderData &&
-            (query.data?.page ?? 0 < (query.data?.total_pages ?? 0))
-          ) {
-            setPage((old) => old + 1);
-          }
-        }}
-        disabled={
-          query.isPlaceholderData ||
-          !(query.data?.page ?? 0 < (query.data?.total_pages ?? 0))
-        }
-      >
-        Next Page
-      </button>
     </div>
   );
 };

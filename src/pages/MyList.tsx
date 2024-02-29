@@ -1,13 +1,17 @@
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
 import { Col, Row } from 'antd';
 
 import type { RootState } from '../app/store';
-import MovieCard from '../components/MovieCard';
+import MoviesGrid from '../components/MoviesGrid';
 import { MovieService } from '../utils/services/movie.service';
 
 const MyList = () => {
   const movieService = new MovieService();
+
+  const [page, setPage] = useState<number>(1);
+
   const guestSessionId = useSelector(
     (state: RootState) => state.guest.guest_session_id,
   );
@@ -18,7 +22,7 @@ const MyList = () => {
       if (!guestSessionId) {
         throw new Error('Guest session not found');
       }
-      return movieService.getRatedMovies(guestSessionId);
+      return movieService.getRatedMovies(guestSessionId, { page: page });
     },
     enabled: !!guestSessionId,
     retry: 2,
@@ -39,18 +43,13 @@ const MyList = () => {
           <h1 className="text-3xl font-bold underline">Rated Movies</h1>
         </Col>
       </Row>
-      <div className="container mx-auto my-0">
-        <Row
-          justify="start"
-          gutter={[16, 16]}
-        >
-          {data?.results.map((movie) => (
-            <Col key={movie.id}>
-              <MovieCard movie={movie} />
-            </Col>
-          ))}
-        </Row>
-      </div>
+      {data && (
+        <MoviesGrid
+          movies={data}
+          page={page}
+          setPage={setPage}
+        />
+      )}
     </div>
   );
 };
