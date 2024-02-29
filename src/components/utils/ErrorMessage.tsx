@@ -4,7 +4,7 @@ interface ErrorProps {
 
 const ErrorMessage = ({ error }: ErrorProps) => {
   return (
-    <div className="container mx-auto text-center border-2">
+    <div className="container mx-auto text-center">
       <h1 className="font-bold my-8 text-4xl">Something went wrong</h1>
       <p>{error}</p>
     </div>
