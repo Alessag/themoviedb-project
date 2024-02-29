@@ -12,9 +12,16 @@ const MyList = () => {
     (state: RootState) => state.guest.guest_session_id,
   );
 
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['rated-movies'],
-    queryFn: () => movieService.getRatedMovies(guestSessionId ?? ''),
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['rated-movies', guestSessionId],
+    queryFn: () => {
+      if (!guestSessionId) {
+        throw new Error('Guest session not found');
+      }
+      return movieService.getRatedMovies(guestSessionId);
+    },
+    enabled: !!guestSessionId,
+    retry: 2,
   });
 
   if (isLoading) {
@@ -22,7 +29,7 @@ const MyList = () => {
   }
 
   if (isError) {
-    return <span>Error: {error.message}</span>;
+    return <span>No rated movies found :(</span>;
   }
 
   return (

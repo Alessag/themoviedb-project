@@ -24,12 +24,16 @@ const MovieCard = ({ movie }: MovieCardProps) => {
   );
 
   const mutation = useMutation({
-    mutationFn: (rating: number) =>
-      movieService.rateMovie(
-        { guest_session_id: guestSessionId ?? '' },
+    mutationFn: (rating: number) => {
+      if (!guestSessionId) {
+        throw new Error('Guest session id not found');
+      }
+      return movieService.rateMovie(
+        { guest_session_id: guestSessionId },
         movie.id,
         rating,
-      ),
+      );
+    },
   });
   const handleOpenModal = () => {
     setIsModalOpen(true);

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { Col, Row } from 'antd';
 
+import MovieCard from '../components/MovieCard';
 import { MovieService } from '../utils/services/movie.service';
 
 const Search = () => {
@@ -28,11 +29,18 @@ const Search = () => {
             }}
           />
         </Col>
-        <ul>
-          {query.data?.results.map((movie) => (
-            <li key={movie.id}>{movie.title}</li>
-          ))}
-        </ul>
+        <div className="container mx-auto my-0">
+          <Row
+            justify="start"
+            gutter={[16, 16]}
+          >
+            {query.data?.results.map((movie) => (
+              <Col key={movie.id}>
+                <MovieCard movie={movie} />
+              </Col>
+            ))}
+          </Row>
+        </div>
       </Row>
       <span>Current Page: {page}</span>
       <button
