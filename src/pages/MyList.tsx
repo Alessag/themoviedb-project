@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Col, Row } from 'antd';
 
 import type { RootState } from '../app/store';
-import MoviesGrid from '../components/MoviesGrid';
+import MoviesGrid from '../components/movies/MoviesGrid';
 import { MovieService } from '../utils/services/movie.service';
 
 const MyList = () => {
@@ -13,7 +13,7 @@ const MyList = () => {
   const [page, setPage] = useState<number>(1);
 
   const guestSessionId = useSelector(
-    (state: RootState) => state.guest.guest_session_id,
+    (state: RootState) => state.guest.guestSessionId,
   );
 
   const { data, isLoading, isError } = useQuery({
@@ -37,10 +37,10 @@ const MyList = () => {
   }
 
   return (
-    <div className="flex justify-center flex-col">
+    <div className="border-4 border-grey-400 container my-0 mx-auto">
       <Row>
         <Col xs={24}>
-          <h1 className="text-3xl font-bold underline">Rated Movies</h1>
+          <h1 className="text-3xl font-bold text-center my-6">Rated Movies</h1>
         </Col>
       </Row>
       {data && (

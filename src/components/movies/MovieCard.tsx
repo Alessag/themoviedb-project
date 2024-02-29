@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
 import { Button, Card, Modal, Rate } from 'antd';
 
-import type { RootState } from '../app/store';
-import { MovieService } from '../utils/services/movie.service';
-import type { Movie } from '../utils/types/movies.types';
+import type { RootState } from '../../app/store';
+import { MovieService } from '../../utils/services/movie.service';
+import type { Movie } from '../../utils/types/movies.types';
 
 const { Meta } = Card;
 
@@ -20,7 +20,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
   const [rating, setRating] = useState<number>(movie.rating ?? 0);
 
   const guestSessionId = useSelector(
-    (state: RootState) => state.guest.guest_session_id,
+    (state: RootState) => state.guest.guestSessionId,
   );
 
   const mutation = useMutation({
@@ -68,7 +68,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
       >
         <Meta
           title={movie.title}
-          description={`Fecha de estreno: ${movie.release_date.toString()}`}
+          description={`Release date: ${movie.release_date.toString()}`}
           className="block w-[190px] text-ellipsis whitespace-nowrap overflow-hidden"
         />
       </Card>

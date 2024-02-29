@@ -1,8 +1,8 @@
 import { Col, Row } from 'antd';
 
-import type { MovieResponse } from '../utils/types/movies.types';
+import type { MovieResponse } from '../../utils/types/movies.types';
+import CustomPagination from '../utils/CustomPagination';
 
-import CustomPagination from './CustomPagination';
 import MovieCard from './MovieCard';
 
 interface MovieCardProps {
@@ -13,10 +13,6 @@ interface MovieCardProps {
 
 const MoviesGrid = ({ movies, page, setPage }: MovieCardProps) => {
   if (!movies) {
-    return <div>No movies available</div>;
-  }
-
-  if (!movies.results) {
     return <div>No movies available</div>;
   }
 
@@ -35,9 +31,9 @@ const MoviesGrid = ({ movies, page, setPage }: MovieCardProps) => {
       <Row
         justify="center"
         align="middle"
-        className="bg-blue-300 h-16 my-5"
+        className="bg-blue-300 h-20 my-7"
       >
-        <Col xs={12}>
+        <Col>
           <CustomPagination
             page={page}
             setPage={setPage}

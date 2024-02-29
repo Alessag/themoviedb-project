@@ -12,6 +12,8 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({
   setPage,
   total_pages,
 }: CustomPaginationProps) => {
+  const MAX_PAGE_NUMBER = 500;
+
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
@@ -20,7 +22,7 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({
     <Pagination
       current={page}
       onChange={handlePageChange}
-      total={total_pages}
+      total={Math.min(MAX_PAGE_NUMBER, total_pages)}
       pageSize={1}
       responsive
       showSizeChanger={false}
