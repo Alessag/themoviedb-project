@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useMutation } from '@tanstack/react-query';
 import { Button, Card, Modal, Rate } from 'antd';
 
+import type { RootState } from '../app/store';
 import { MovieService } from '../utils/services/movie.service';
 import type { Movie } from '../utils/types/movies.types';
 
@@ -17,10 +19,14 @@ const MovieCard = ({ movie }: MovieCardProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rating, setRating] = useState<number>(movie.rating ?? 0);
 
+  const guestSessionId = useSelector(
+    (state: RootState) => state.guest.guest_session_id,
+  );
+
   const mutation = useMutation({
     mutationFn: (rating: number) =>
       movieService.rateMovie(
-        { guest_session_id: '5a1c1e316eb6a1efecf7419b3b604ce7' },
+        { guest_session_id: guestSessionId ?? '' },
         movie.id,
         rating,
       ),

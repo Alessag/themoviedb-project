@@ -1,20 +1,15 @@
-import { useSelector } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
 import { Col, Row } from 'antd';
 
-import type { RootState } from '../app/store';
 import MovieCard from '../components/MovieCard';
 import { MovieService } from '../utils/services/movie.service';
 
-const MyList = () => {
+const Home = () => {
   const movieService = new MovieService();
-  const guestSessionId = useSelector(
-    (state: RootState) => state.guest.guest_session_id,
-  );
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['rated-movies'],
-    queryFn: () => movieService.getRatedMovies(guestSessionId ?? ''),
+    queryKey: ['movies'],
+    queryFn: () => movieService.getPopularMovies(),
   });
 
   if (isLoading) {
@@ -29,7 +24,7 @@ const MyList = () => {
     <div className="flex justify-center flex-col">
       <Row>
         <Col xs={24}>
-          <h1 className="text-3xl font-bold underline">Rated Movies</h1>
+          <h1 className="text-3xl font-bold underline">Popular Movies</h1>
         </Col>
       </Row>
       <div className="container mx-auto my-0">
@@ -48,4 +43,4 @@ const MyList = () => {
   );
 };
 
-export default MyList;
+export default Home;

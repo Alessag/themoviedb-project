@@ -70,7 +70,7 @@ export class MovieService {
     return response;
   };
 
-  guestSessionId = async (): Promise<GuestSessionIdResponse> => {
+  getGuestSessionId = async (): Promise<GuestSessionIdResponse> => {
     const response = await this.makeRequest<GuestSessionIdResponse, null>(
       'authentication/guest_session/new',
       'GET',
