@@ -33,6 +33,10 @@ npm install
 
 This project utilizes a .env file to store sensitive environment variables, such as API keys
 
+Do not include your actual API key in the .env file within the project repository
+
+VITE_API_KEY: Allows communication with TheMovieDB API to retrieve movies data
+
 ```bash
 VITE_API_KEY=aki_key
 ```
