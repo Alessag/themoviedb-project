@@ -15,16 +15,21 @@ module.exports = {
     'plugin:react/jsx-runtime',
     'plugin:react/recommended',
     'prettier',
+    'plugin:cypress/recommended',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
+    project: [
+      './tsconfig.json',
+      './tsconfig.node.json',
+      './cypress/tsconfig.json',
+    ],
     tsconfigRootDir: __dirname,
   },
-  plugins: ['react-refresh', 'simple-import-sort'],
+  plugins: ['react-refresh', 'simple-import-sort', 'cypress'],
   rules: {
     eqeqeq: ['error', 'always'],
     'no-await-in-loop': 'error',
@@ -103,6 +108,16 @@ module.exports = {
             ],
           },
         ],
+      },
+    },
+    {
+      files: ['cypress/**/*.ts'],
+      env: {
+        'cypress/globals': true,
+      },
+      rules: {
+        'spaced-comment': 'off',
+        '@typescript-eslint/prefer-nullish-coalescing': 'off',
       },
     },
   ],
