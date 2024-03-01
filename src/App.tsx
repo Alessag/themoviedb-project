@@ -13,8 +13,6 @@ import Search from './pages/Search';
 import Root from './routes/root';
 import { MovieService } from './utils/services/movie.service';
 
-import './App.css';
-
 const router = createBrowserRouter([
   {
     path: '/',

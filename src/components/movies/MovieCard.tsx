@@ -25,7 +25,7 @@ const MovieCard = ({ movie, movieSelected }: MovieCardProps) => {
       >
         <Meta
           title={movie.title}
-          description={`Release date: ${movie.release_date.toString()}`}
+          description={`Release date: ${movie.release_date}`}
           className="block w-[190px] text-ellipsis whitespace-nowrap overflow-hidden"
         />
       </Card>
