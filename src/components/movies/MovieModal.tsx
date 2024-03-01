@@ -42,7 +42,7 @@ const MovieModal = ({
           </p>
           <p>
             <span className="font-bold">Release Date:</span>{' '}
-            {movie.release_date.toString()}
+            {movie.release_date}
           </p>
           <p>
             <span className="font-bold">Vote Average:</span>{' '}
