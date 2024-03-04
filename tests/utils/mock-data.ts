@@ -372,3 +372,10 @@ export const mockSingleMovieApiResponse: MovieResponse = {
   total_pages: 1,
   total_results: 1,
 };
+
+export const mockNotMovieFoundApiResponse: MovieResponse = {
+  page: 1,
+  results: [],
+  total_pages: 1,
+  total_results: 1,
+};
