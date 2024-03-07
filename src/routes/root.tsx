@@ -4,7 +4,7 @@ import Header from '../components/Header';
 
 const Root = () => {
   return (
-    <div>
+    <div className="container mx-auto my-0">
       <Header />
       <Outlet />
     </div>

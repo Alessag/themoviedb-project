@@ -70,8 +70,9 @@ const MoviesGrid = ({ movies, page, setPage }: MovieCardProps) => {
   return (
     <div className="container mx-auto my-0">
       <Row
-        justify="start"
+        justify="center"
         gutter={[16, 16]}
+        className="md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
       >
         {movies.results.map((movie) => (
           <Col key={movie.id}>
