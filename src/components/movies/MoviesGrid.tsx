@@ -64,7 +64,7 @@ const MoviesGrid = ({ movies, page, setPage }: MovieCardProps) => {
   };
 
   if (movies.results.length === 0) {
-    return <div>No movies available</div>;
+    return <div className="container text-center">No movies available</div>;
   }
 
   return (
