@@ -16,6 +16,7 @@ const MovieModal = ({
   isModalOpen,
 }: MovieModalProps) => {
   const [rating, setRating] = useState<number>(movie.rating ?? 0);
+  const isSubmitDisabled = rating === 0;
 
   const handleRateChange = (value: number) => {
     setRating(value);
@@ -67,6 +68,7 @@ const MovieModal = ({
               key="submit"
               type="primary"
               ghost
+              disabled={isSubmitDisabled}
               onClick={() => {
                 handleRateSubmit(movie.id, rating);
                 setRating(0);
