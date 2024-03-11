@@ -1,4 +1,8 @@
-import type { Movie, MovieResponse } from '../../src/utils/types/movies.types';
+import type {
+  GuestSessionIdResponse,
+  Movie,
+  MovieResponse,
+} from '../../src/utils/types/movies.types';
 
 export const mockMovieApiResponse: MovieResponse = {
   page: 1,
@@ -378,4 +382,10 @@ export const mockNotMovieFoundApiResponse: MovieResponse = {
   results: [],
   total_pages: 1,
   total_results: 1,
+};
+
+export const mockGuestSessionIdApiResponse: GuestSessionIdResponse = {
+  success: true,
+  guest_session_id: '1fdb8777cd1af889a42885732230767e',
+  expires_at: '2024-03-12 15:13:39 UTC',
 };

@@ -2,6 +2,7 @@ import fetchMock from 'jest-fetch-mock';
 
 import { MovieService } from '../../src/utils/services/movie.service';
 import {
+  mockGuestSessionIdApiResponse,
   mockMovie,
   mockMovieApiResponse,
   mockNotMovieFoundApiResponse,
@@ -82,6 +83,36 @@ describe('MovieService', () => {
       await expect(
         movieService.searchMovies({ query: 'asdfg' }),
       ).rejects.toThrow('The resource you requested could not be found');
+    });
+  });
+
+  describe('getGuestSessionId', () => {
+    it('Should make a request to get a session id', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify(mockGuestSessionIdApiResponse));
+
+      const response = await movieService.getGuestSessionId();
+
+      expect(response.success).toBe(true);
+      expect(response.guest_session_id).toEqual(
+        '1fdb8777cd1af889a42885732230767e',
+      );
+      expect(response.expires_at).toMatch(
+        /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} UTC$/,
+      );
+      expect(fetchMock).toHaveBeenCalledWith(
+        expect.stringContaining('authentication/guest_session/new'),
+        expect.objectContaining({
+          method: 'GET',
+        }),
+      );
+    });
+
+    it('Should throw an error when the API request fails', async () => {
+      fetchMock.mockReject(new Error('Failed to fetch guest session ID'));
+
+      await expect(movieService.getGuestSessionId()).rejects.toThrow(
+        'Failed to fetch guest session ID',
+      );
     });
   });
 });
