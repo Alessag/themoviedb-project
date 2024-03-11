@@ -1,43 +1,87 @@
 import fetchMock from 'jest-fetch-mock';
 
 import { MovieService } from '../../src/utils/services/movie.service';
-import { mockMovieApiResponse } from '../utils/mock-data';
+import {
+  mockMovie,
+  mockMovieApiResponse,
+  mockNotMovieFoundApiResponse,
+  mockSingleMovieApiResponse,
+} from '../utils/mock-data';
 
-fetchMock.enableMocks();
+describe('MovieService', () => {
+  let movieService: MovieService;
 
-describe('movieService', () => {
+  beforeAll(() => {
+    fetchMock.enableMocks();
+  });
+
   beforeEach(() => {
-    fetchMock.resetMocks(); // Reset fetch mocks before each test
+    movieService = new MovieService();
+    fetchMock.resetMocks();
   });
 
-  it('fetches popular movies', async () => {
-    // Mock the fetch call to return a successful response
-    fetchMock.mockResponseOnce(JSON.stringify(mockMovieApiResponse));
+  describe('getPopularMovies', () => {
+    it('Should return the popular movies', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify(mockMovieApiResponse));
 
-    const service = new MovieService();
+      const popularMovies = await movieService.getPopularMovies();
 
-    const data = await service.getPopularMovies();
+      expect(popularMovies.results).toBeInstanceOf(Array);
+      expect(popularMovies.results).not.toHaveLength(0);
+      expect(popularMovies.total_results).toBeGreaterThan(0);
+      expect(popularMovies.total_pages).toBeGreaterThan(0);
+      expect(popularMovies.page).toBe(1);
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+    });
 
-    // Assertions to verify the service behaves as expected
-    expect(data.results).toBeInstanceOf(Array);
-    expect(data.results).not.toHaveLength(0);
-    expect(data.total_results).toBeGreaterThan(0);
-    expect(data.total_pages).toBeGreaterThan(0);
-    expect(data.page).toBe(1);
-    expect(fetchMock).toHaveBeenCalledTimes(1);
+    it('Should throw an error when the API request fails due to an invalid key', async () => {
+      fetchMock.mockRejectOnce(
+        new Error('Invalid API key: You must be granted a valid key.'),
+      );
+
+      const service = new MovieService();
+      await expect(service.getPopularMovies()).rejects.toThrow(
+        'Invalid API key: You must be granted a valid key.',
+      );
+    });
   });
 
-  it('fetches it fails without the valid key fails ', async () => {
-    // Mock the fetch call to simulate a failure
-    fetchMock.mockReject(
-      new Error('Invalid API key: You must be granted a valid key.'),
-    );
+  describe('searchMovies', () => {
+    it('Should make a request to search a movie given the movie name', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify(mockSingleMovieApiResponse));
 
-    const service = new MovieService();
+      const response = await movieService.searchMovies({
+        query: 'Anyone But You',
+      });
 
-    // Assert that the service throws an error as expected
-    await expect(service.getPopularMovies()).rejects.toThrow(
-      'Invalid API key: You must be granted a valid key.',
-    );
+      expect(response.results).toBeInstanceOf(Array);
+      expect(response.results).toHaveLength(1);
+      expect(response.results[0].title).toEqual(mockMovie.title);
+      expect(fetchMock).toHaveBeenCalledWith(
+        expect.stringContaining('search/movie'),
+        expect.objectContaining({
+          method: 'GET',
+        }),
+      );
+    });
+
+    it('Should return an empty array if there are no movies found', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify(mockNotMovieFoundApiResponse));
+
+      const response = await movieService.searchMovies({ query: 'asdfg' });
+
+      expect(response.results).toBeInstanceOf(Array);
+      expect(response.results).toHaveLength(0);
+    });
+
+    it('Should handle network errors', async () => {
+      fetchMock.mockRejectOnce(
+        new Error('The resource you requested could not be found'),
+      );
+
+      await expect(
+        movieService.searchMovies({ query: 'asdfg' }),
+      ).rejects.toThrow('The resource you requested could not be found');
+    });
   });
 });

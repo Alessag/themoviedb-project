@@ -350,25 +350,32 @@ export const mockMovieApiResponse: MovieResponse = {
 
 export const mockMovie: Movie = {
   adult: false,
-  backdrop_path: '/gMJngTNfaqCSCqGD4y8lVMZXKDn.jpg',
-  genre_ids: [28, 12, 878],
-  id: 640146,
+  backdrop_path: '/nTPFkLUARmo1bYHfkfdNpRKgEOs.jpg',
+  genre_ids: [35, 10749],
+  id: 1072790,
   original_language: 'en',
-  original_title: 'Ant-Man and the Wasp: Quantumania',
+  original_title: 'Anyone But You',
   overview:
-    "Super-Hero partners Scott Lang and Hope van Dyne, along with with Hope's parents Janet van Dyne and Hank Pym, and Scott's daughter Cassie Lang, find themselves exploring the Quantum Realm, interacting with strange new creatures and embarking on an adventure that will push them beyond the limits of what they thought possible.",
-  popularity: 8567.865,
-  poster_path: '/ngl2FKBlU4fhbdsrtdom9LVLBXw.jpg',
-  release_date: '2023-02-15',
-  title: 'Ant-Man and the Wasp: Quantumania',
+    'After an amazing first date, Bea and Ben’s fiery attraction turns ice cold — until they find themselves unexpectedly reunited at a destination wedding in Australia. So they do what any two mature adults would do: pretend to be a couple.',
+  popularity: 1082.943,
+  poster_path: '/yRt7MGBElkLQOYRvLTT1b3B1rcp.jpg',
+  release_date: '2023-12-21',
+  title: 'Anyone But You',
   video: false,
-  vote_average: 6.5,
-  vote_count: 1886,
+  vote_average: 6.99,
+  vote_count: 907,
 };
 
 export const mockSingleMovieApiResponse: MovieResponse = {
   page: 1,
   results: [mockMovie],
+  total_pages: 1,
+  total_results: 1,
+};
+
+export const mockNotMovieFoundApiResponse: MovieResponse = {
+  page: 1,
+  results: [],
   total_pages: 1,
   total_results: 1,
 };
