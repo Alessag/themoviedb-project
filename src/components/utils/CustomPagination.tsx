@@ -16,6 +16,7 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
