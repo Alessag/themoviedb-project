@@ -2,6 +2,7 @@ import fetchMock from 'jest-fetch-mock';
 
 import { MovieService } from '../../src/utils/services/movie.service';
 import {
+  mockMovie,
   mockMovieApiResponse,
   mockNotMovieFoundApiResponse,
   mockSingleMovieApiResponse,
@@ -10,12 +11,12 @@ import {
 describe('MovieService', () => {
   let movieService: MovieService;
 
-  beforeEach(() => {
-    movieService = new MovieService();
+  beforeAll(() => {
     fetchMock.enableMocks();
   });
 
-  afterEach(() => {
+  beforeEach(() => {
+    movieService = new MovieService();
     fetchMock.resetMocks();
   });
 
@@ -33,8 +34,8 @@ describe('MovieService', () => {
       expect(fetchMock).toHaveBeenCalledTimes(1);
     });
 
-    it('Should throw and error when the API request fails without the valid key', async () => {
-      fetchMock.mockReject(
+    it('Should throw an error when the API request fails due to an invalid key', async () => {
+      fetchMock.mockRejectOnce(
         new Error('Invalid API key: You must be granted a valid key.'),
       );
 
@@ -46,25 +47,25 @@ describe('MovieService', () => {
   });
 
   describe('searchMovies', () => {
-    it('Should make a request to search a movie given the full movie name', async () => {
-      // Should return the API response whit the movies that match whit the given parameter
+    it('Should make a request to search a movie given the movie name', async () => {
       fetchMock.mockResponseOnce(JSON.stringify(mockSingleMovieApiResponse));
 
       const response = await movieService.searchMovies({
-        query: 'Ant-Man and the Wasp: Quantumania',
+        query: 'Anyone But You',
       });
 
       expect(response.results).toBeInstanceOf(Array);
       expect(response.results).toHaveLength(1);
-      // If a put the query in the searchMovie and here I comparethe expected result with the same expected title, it's that okat(?)
-      expect(response.results[0].title).toEqual(response.results[0].title);
+      expect(response.results[0].title).toEqual(mockMovie.title);
+      expect(fetchMock).toHaveBeenCalledWith(
+        expect.stringContaining('search/movie'),
+        expect.objectContaining({
+          method: 'GET',
+        }),
+      );
     });
 
-    // Should make a request to search a movie given the first 3 words of the title
-    // --> Should return an array with the movies that title have the words
-
-    // if there are not movies found, the API should return an empty array
-    it('If there are no movies found give the title should the API return an empty results array', async () => {
+    it('Should return an empty array if there are no movies found', async () => {
       fetchMock.mockResponseOnce(JSON.stringify(mockNotMovieFoundApiResponse));
 
       const response = await movieService.searchMovies({ query: 'asdfg' });
@@ -73,19 +74,14 @@ describe('MovieService', () => {
       expect(response.results).toHaveLength(0);
     });
 
-    // If there is an error fetching the data
-
-    // internet conection
     it('Should handle network errors', async () => {
-      fetchMock.mockReject(
+      fetchMock.mockRejectOnce(
         new Error('The resource you requested could not be found'),
       );
 
       await expect(
         movieService.searchMovies({ query: 'asdfg' }),
       ).rejects.toThrow('The resource you requested could not be found');
-      // "The resource you requested could not be found."
-      // status_code : 404 not found
     });
   });
 });
