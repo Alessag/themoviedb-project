@@ -1,11 +1,13 @@
 import fetchMock from 'jest-fetch-mock';
 
 import { MovieService } from '../../src/utils/services/movie.service';
+import type { RateMovieParams } from '../../src/utils/types/movies.types';
 import {
   mockGuestSessionIdApiResponse,
   mockMovie,
   mockMovieApiResponse,
   mockNotMovieFoundApiResponse,
+  mockRateMovieApiResponse,
   mockSingleMovieApiResponse,
 } from '../utils/mock-data';
 
@@ -113,6 +115,21 @@ describe('MovieService', () => {
       await expect(movieService.getGuestSessionId()).rejects.toThrow(
         'Failed to fetch guest session ID',
       );
+    });
+  });
+
+  describe('rateMovie', () => {
+    it('Should make the request to rate a movie given the movie rate value', async () => {
+      fetchMock.mockResponseOnce(JSON.stringify(mockRateMovieApiResponse));
+
+      const input: RateMovieParams = {
+        guest_session_id: '123456789',
+      };
+      const movieId = 123456;
+      const rate = 6;
+      const response = await movieService.rateMovie(input, movieId, rate);
+
+      expect(response).toEqual(mockRateMovieApiResponse);
     });
   });
 });

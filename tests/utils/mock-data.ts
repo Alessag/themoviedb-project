@@ -389,3 +389,9 @@ export const mockGuestSessionIdApiResponse: GuestSessionIdResponse = {
   guest_session_id: '1fdb8777cd1af889a42885732230767e',
   expires_at: '2024-03-12 15:13:39 UTC',
 };
+
+export const mockRateMovieApiResponse = {
+  status_code: 1,
+  status_message: 'Success.',
+  success: true,
+};
