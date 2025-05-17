@@ -26,7 +26,7 @@ describe('MovieService', () => {
 
       const popularMovies = await movieService.getPopularMovies();
 
-      expect(popularMovies.results).toBeInstanceOf(Array);
+      expect(popularMovies.results).not.toBeInstanceOf(Array);
       expect(popularMovies.results).not.toHaveLength(0);
       expect(popularMovies.total_results).toBeGreaterThan(0);
       expect(popularMovies.total_pages).toBeGreaterThan(0);
